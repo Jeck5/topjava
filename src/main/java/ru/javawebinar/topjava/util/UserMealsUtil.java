@@ -33,28 +33,26 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExceed> getFilteredWithExceededWithCycles(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
-        Map<LocalDate, Integer> map = new HashMap<>();
+        Map<LocalDate, Integer> localDateIntegerMap = new HashMap<>();
         for (UserMeal el : mealList) {
-            map.merge(el.getDateTime().toLocalDate(), el.getCalories(), (a, b) -> a + b);
+            localDateIntegerMap.merge(el.getDateTime().toLocalDate(), el.getCalories(), Integer::sum);
         }
 
-        List<UserMealWithExceed> list = new ArrayList<>();
+        List<UserMealWithExceed> userMealWithExceedList = new ArrayList<>();
         for (UserMeal el : mealList) {
             if (TimeUtil.isBetween(el.getDateTime().toLocalTime(), startTime, endTime)) {
-                list.add(new UserMealWithExceed(el.getDateTime(), el.getDescription(), el.getCalories(),
-                        map.get(el.getDateTime().toLocalDate()) > caloriesPerDay));
+                userMealWithExceedList.add(new UserMealWithExceed(el.getDateTime(), el.getDescription(), el.getCalories(),
+                        localDateIntegerMap.get(el.getDateTime().toLocalDate()) > caloriesPerDay));
             }
         }
-        return list;
+        return userMealWithExceedList;
     }
 
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
-        Map<LocalDate, Integer> map = new HashMap<>();
-        mealList.forEach(el -> map.merge(el.getDateTime().toLocalDate(), el.getCalories(), (a, b) -> a + b));
-
+        Map<LocalDate, Integer> localDateIntegerMap = mealList.stream().collect(Collectors.groupingBy(el -> el.getDateTime().toLocalDate(), Collectors.summingInt(UserMeal::getCalories)));
         return mealList.stream().filter(el -> TimeUtil.isBetween(el.getDateTime().toLocalTime(), startTime, endTime))
                 .map(el -> new UserMealWithExceed(el.getDateTime(), el.getDescription(), el.getCalories(),
-                        map.get(el.getDateTime().toLocalDate()) > caloriesPerDay)).collect(Collectors.toList());
+                        localDateIntegerMap.get(el.getDateTime().toLocalDate()) > caloriesPerDay)).collect(Collectors.toList());
     }
 }
