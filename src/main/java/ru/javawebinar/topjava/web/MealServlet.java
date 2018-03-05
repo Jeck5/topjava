@@ -23,7 +23,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
-    MealRepository repository = new MealRepositoryImpl();//TO DO check multithreading
+    MealRepository repository = new MealRepositoryImpl();
     private static String LIST_MEAL = "/meals.jsp";
     private static String INSERT_OR_EDIT_MEAL = "/mealPage.jsp";
 
@@ -55,10 +55,12 @@ public class MealServlet extends HttpServlet {
         String forwardTo = LIST_MEAL;
         request.setCharacterEncoding("UTF-8");
         log.debug("from doPost");
-//        log.debug(request.getParameter("mealid"));
-//        log.debug(request.getParameter("calories"));
-//        log.debug(request.getParameter("description"));//TO DO encoding letters fail
-//        log.debug(request.getParameter("datetime"));
+
+        log.debug(request.getParameter("mealid"));
+        log.debug(request.getParameter("calories"));
+        log.debug(request.getParameter("description"));//TO DO encoding letters fail
+        log.debug(request.getParameter("datetime"));
+
         Meal meal = new Meal();
         meal.setId(Long.parseLong(request.getParameter("mealid")));
         meal.setCalories(Integer.parseInt(request.getParameter("calories")));

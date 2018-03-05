@@ -15,19 +15,43 @@
 <h2>Create/edit meal</h2>
 <nav>
     <form method="POST" action='meals' name="mealForm">
-        Meal ID : <input type="text" readonly="readonly" name="mealid"
-                         value="<c:out value="${meal.getId()}" />" /> <br />
-        Description : <input
-            type="text" name="description"
-            value="<c:out value="${meal.getDescription()}" />" /> <br />
-        Calories : <input
-            type="text" name="calories"
-            value="<c:out value="${meal.getCalories()}" />" /> <br />
-        DateTime : <input
-            type="text" name="datetime"
-            value="<c:out value="${meal.getDateTime().toString().replace('T',' ')}" />" /> <br /> <input
-            type="submit" value="Submit" />
+        <div class="form-group row">
+            <label for="id1" class="col-sm-1 col-form-label">Meal ID</label>
+            <div class="col-sm-3">
+                <input type="text" name="mealid" readonly="readonly" id="id1"
+                       value="<c:out value="${meal.getId()}" />" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="id2" class="col-sm-1 col-form-label">Description</label>
+            <div class="col-sm-3">
+                <input type="text" name="description" id="id2"
+                       value="<c:out value="${meal.getDescription()}" />" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="id3" class="col-sm-1 col-form-label">Calories</label>
+            <div class="col-sm-3">
+                <input type="text" name="calories" id="id3"
+                       value="<c:out value="${meal.getCalories()}" />" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="id4" class="col-sm-1 col-form-label">Datetime</label>
+            <div class="col-sm-3">
+                <input type="text"  name="datetime" id="id4"
+                       value="<c:out value="${meal.getDateTime().toString().replace('T',' ')}" />" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-3">
+                <input type="submit" value="Submit" />
+            </div>
+        </div>
+
     </form>
+
+
 </nav>
 </body>
 </html>
