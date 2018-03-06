@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MealRepository {
     Meal read(long id);
-    void createOrUpdate(Meal meal);
+    Meal createOrUpdate(Meal meal);
     void delete(long id);
-    List<MealWithExceed> findAll();
+    List<Meal> findAll();
 }

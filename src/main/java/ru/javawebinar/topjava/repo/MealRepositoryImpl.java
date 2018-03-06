@@ -1,36 +1,56 @@
 package ru.javawebinar.topjava.repo;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealWithExceed;
-import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.IdGenerator;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MealRepositoryImpl implements MealRepository {
+    private List<Meal> MEALS = new CopyOnWriteArrayList<>(Arrays.asList(
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 10, 0), "Завтрак", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 13, 0), "Обед", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 20, 0), "Ужин", 400),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
+    ));
+
+
     @Override
-    public void createOrUpdate(Meal meal) {
-        if (MealsUtil.MEALS.stream().filter(ml -> (ml.getId() == meal.getId())).count() == 0) {
-            MealsUtil.MEALS.add(meal);
+    public Meal createOrUpdate(Meal meal) {
+        if (meal.getId() == 0) {
+            meal.setId(IdGenerator.getInstance().generate());
+        }
+
+        if (this.MEALS.stream().filter(ml -> (ml.getId() == meal.getId())).count() == 0) {
+            this.MEALS.add(meal);
         } else {
             this.delete(meal.getId());
-            MealsUtil.MEALS.add(meal);
+            this.MEALS.add(meal);
         }
+        return meal;
     }
 
     @Override
     public void delete(long id) {
-        MealsUtil.MEALS.removeIf(meal -> (meal.getId() == id));
+        this.MEALS.removeIf(meal -> (meal.getId() == id));
     }
 
     @Override
-    public List<MealWithExceed> findAll() {
-        return MealsUtil.getFilteredWithExceededInOnePass(MealsUtil.MEALS, LocalTime.of(0, 0),
-                    LocalTime.of(23, 59), MealsUtil.CALORIES_PER_DAY);
+    public List<Meal> findAll() {
+        return this.MEALS;
     }
 
     @Override
     public Meal read(long id) {
-        return MealsUtil.MEALS.stream().filter(meal -> (meal.getId() == id)).findFirst().orElse(null);
+        return this.MEALS.stream().filter(meal -> (meal.getId() == id)).findFirst().orElse(null);
     }
 }

@@ -5,7 +5,6 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.repo.MealRepository;
 import ru.javawebinar.topjava.repo.MealRepositoryImpl;
-import ru.javawebinar.topjava.util.IdGenerator;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -26,28 +25,37 @@ public class MealServlet extends HttpServlet {
     MealRepository repository = new MealRepositoryImpl();
     private static String LIST_MEAL = "/meals.jsp";
     private static String INSERT_OR_EDIT_MEAL = "/mealPage.jsp";
+    private List<MealWithExceed> findAllWithExceed(List<Meal> mealList){
+        return MealsUtil.getFilteredWithExceededInOnePass(mealList, LocalTime.MIN,
+                    LocalTime.MAX, MealsUtil.CALORIES_PER_DAY);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to meals");
         String forwardTo = "";
         String action = request.getParameter("action");
-        if (action == null) {
-            forwardTo = LIST_MEAL;
-            request.setAttribute("mealsWithExceed", repository.findAll());
-        } else if ("delete".equalsIgnoreCase(action)) {
-            long mealId = Long.parseLong(request.getParameter("id"));
-            repository.delete(mealId);
-            forwardTo = LIST_MEAL;
-            request.setAttribute("mealsWithExceed", repository.findAll());
-        } else if ("edit".equalsIgnoreCase(action)) {
-            forwardTo = INSERT_OR_EDIT_MEAL;
-            long mealId = Long.parseLong(request.getParameter("id"));
-            Meal meal = repository.read(mealId);
-            if (meal==null) {meal = new Meal();} //default meal
-            request.setAttribute("meal", meal);
+        if (action==null) action = "";
+        long mealId;
+        switch (action){
+            case "delete":
+                mealId = Long.parseLong(request.getParameter("id"));
+                repository.delete(mealId);
+                forwardTo = LIST_MEAL;
+                request.setAttribute("mealsWithExceed", findAllWithExceed(repository.findAll()));
+                break;
+            case "edit":
+                forwardTo = INSERT_OR_EDIT_MEAL;
+                mealId = Long.parseLong(request.getParameter("id"));
+                Meal meal = repository.read(mealId);
+                if (meal==null) {meal = new Meal();}
+                request.setAttribute("meal", meal);
+                break;
+            default:
+                forwardTo = LIST_MEAL;
+                request.setAttribute("mealsWithExceed", findAllWithExceed(repository.findAll()));
+                break;
         }
-
         request.getRequestDispatcher(forwardTo).forward(request, response);
     }
 
@@ -68,11 +76,8 @@ public class MealServlet extends HttpServlet {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("datetime"), formatter);
         meal.setDateTime(dateTime);
-        if (meal.getId() == 0) {
-            meal.setId(IdGenerator.getInstance().generate());
-        }
         repository.createOrUpdate(meal);
-        request.setAttribute("mealsWithExceed", repository.findAll());
+        request.setAttribute("mealsWithExceed", findAllWithExceed(repository.findAll()));
         request.getRequestDispatcher(forwardTo).forward(request, response);
     }
 }

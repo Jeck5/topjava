@@ -16,6 +16,7 @@ public class Meal extends HasId{
 
     public Meal(){
         super(0);
+//        this(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),"",0);
         this.setDateTime(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
         this.setDescription("");
         this.setCalories(0);
