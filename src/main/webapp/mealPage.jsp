@@ -15,13 +15,8 @@
 <h2>Create/edit meal</h2>
 <nav>
     <form method="POST" action='meals' name="mealForm">
-        <div class="form-group row">
-            <label for="id1" class="col-sm-1 col-form-label">Meal ID</label>
-            <div class="col-sm-3">
-                <input type="text" name="mealid" readonly="readonly" id="id1"
-                       value="<c:out value="${meal.getId()}" />" />
-            </div>
-        </div>
+        <input type="hidden" name="mealid" readonly="readonly" id="id1"
+             value="<c:out value="${meal.getId()}" />" />
         <div class="form-group row">
             <label for="id2" class="col-sm-1 col-form-label">Description</label>
             <div class="col-sm-3">

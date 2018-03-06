@@ -41,8 +41,7 @@ public class MealServlet extends HttpServlet {
             case "delete":
                 mealId = Long.parseLong(request.getParameter("id"));
                 repository.delete(mealId);
-                forwardTo = LIST_MEAL;
-                request.setAttribute("mealsWithExceed", findAllWithExceed(repository.findAll()));
+                response.sendRedirect("meals");
                 break;
             case "edit":
                 forwardTo = INSERT_OR_EDIT_MEAL;
@@ -50,13 +49,15 @@ public class MealServlet extends HttpServlet {
                 Meal meal = repository.read(mealId);
                 if (meal==null) {meal = new Meal();}
                 request.setAttribute("meal", meal);
+                request.getRequestDispatcher(forwardTo).forward(request, response);
                 break;
             default:
                 forwardTo = LIST_MEAL;
                 request.setAttribute("mealsWithExceed", findAllWithExceed(repository.findAll()));
+                request.getRequestDispatcher(forwardTo).forward(request, response);
                 break;
         }
-        request.getRequestDispatcher(forwardTo).forward(request, response);
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

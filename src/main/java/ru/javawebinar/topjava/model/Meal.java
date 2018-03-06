@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.model;
 
-import ru.javawebinar.topjava.util.IdGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,15 +14,11 @@ public class Meal extends HasId{
     private int calories;
 
     public Meal(){
-        super(0);
-//        this(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),"",0);
-        this.setDateTime(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
-        this.setDescription("");
-        this.setCalories(0);
+        this(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),"",0);
     }
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
-        super(IdGenerator.getInstance().generate());
+        super(0);
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;

@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.repo;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.util.IdGenerator;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -9,6 +8,7 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class MealRepositoryImpl implements MealRepository {
     private List<Meal> MEALS = new CopyOnWriteArrayList<>(Arrays.asList(
@@ -22,12 +22,17 @@ public class MealRepositoryImpl implements MealRepository {
             new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
             new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
     ));
+    private AtomicLong currentId = new AtomicLong(100000L);
+
+    {
+        this.MEALS.forEach(meal -> meal.setId(currentId.incrementAndGet()));
+    }
 
 
     @Override
     public Meal createOrUpdate(Meal meal) {
         if (meal.getId() == 0) {
-            meal.setId(IdGenerator.getInstance().generate());
+            meal.setId(currentId.incrementAndGet());
         }
 
         if (this.MEALS.stream().filter(ml -> (ml.getId() == meal.getId())).count() == 0) {
