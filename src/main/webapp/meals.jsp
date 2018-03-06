@@ -19,7 +19,6 @@
             <th class="col-md-1" scope="col">Datetime</th>
             <th class="col-md-1" scope="col">Description</th>
             <th class="col-md-1" scope="col">Calories</th>
-            <th class="col-md-1" scope="col">Exceed</th>
             <th class="col-md-1" scope="col">Edit</th>
             <th class="col-md-1" scope="col">Delete</th>
         </tr>

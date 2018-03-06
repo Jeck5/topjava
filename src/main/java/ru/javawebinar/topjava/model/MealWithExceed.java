@@ -27,7 +27,7 @@ public class MealWithExceed extends HasId{
         return exceed;
     }
 
-    public MealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed, long id) {
+    public MealWithExceed(long id, LocalDateTime dateTime, String description, int calories, boolean exceed) {
         super(id);
         this.dateTime = dateTime;
         this.description = description;

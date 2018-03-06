@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,7 +17,10 @@ import static java.util.stream.Collectors.toList;
 
 public class MealsUtil {
     public static final int CALORIES_PER_DAY = 2000;
-    public static List<Meal> MEALS = new CopyOnWriteArrayList<>(Arrays.asList(
+    public static List<Meal> MEALS = new ArrayList<>(Arrays.asList(
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 10, 0), "Завтрак", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 13, 0), "Обед", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 29, 20, 0), "Ужин", 400),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
@@ -110,6 +112,6 @@ public class MealsUtil {
     }
 
     public static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
-        return new MealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded, meal.getId());
+        return new MealWithExceed(meal.getId(),  meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
     }
 }
