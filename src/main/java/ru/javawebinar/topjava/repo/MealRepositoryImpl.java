@@ -32,9 +32,6 @@ public class MealRepositoryImpl implements MealRepository {
         if (meal.getId() == 0) {
             meal.setId(currentId.incrementAndGet());
         }
-        if (mealMap.containsKey(meal.getId())) {
-            this.delete(meal.getId());
-        }
         mealMap.put(meal.getId(), meal);
         return meal;
     }
