@@ -21,10 +21,9 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public boolean delete(int id) {
         log.info("delete {}", id);
-        //int size = repository.size();
+        int size = repository.size();
         repository.remove(id);
-        return true;
-        //return size == repository.size() + 1;//TODO check it
+        return size == repository.size() + 1;
     }
 
     @Override
@@ -55,6 +54,6 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-        return repository.values().stream().filter(user -> user.getEmail().equalsIgnoreCase(email)).findFirst().orElse(null);
+        return getAll().stream().filter(user -> user.getEmail().equalsIgnoreCase(email)).findFirst().orElse(null);
     }
 }
