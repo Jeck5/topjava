@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -13,9 +15,16 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class MealServiceImpl implements MealService {
 
-    private /*final*/ MealRepository repository;
+
+    private final MealRepository repository;
+
+    @Autowired
+    public MealServiceImpl(MealRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Meal create(Meal meal, Integer userId) {
