@@ -18,9 +18,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
@@ -78,10 +82,19 @@ public class MealServlet extends HttpServlet {
                 break;
             case "all":
             default:
-                log.info("getAll");
-                log.info("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
-                request.setAttribute("meals",
-                        controller.getAll());
+                if (request.getParameterMap().size() == 0) {
+                    log.info("getAll");
+                    request.setAttribute("meals",
+                            controller.getAll());
+                } else{
+                    log.info("getFiltered");
+                    LocalDate startDate = parseParameterDate(request.getParameter("startDate"),true);
+                    LocalDate endDate = parseParameterDate(request.getParameter("endDate"),false);
+                    LocalTime startTime = parseParameterTime(request.getParameter("startTime"),true);
+                    LocalTime endTime = parseParameterTime(request.getParameter("endTime"),false);
+                    request.setAttribute("meals",
+                            controller.getFiltered(startDate,startTime,endDate,endTime));
+                }
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
@@ -91,4 +104,27 @@ public class MealServlet extends HttpServlet {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
     }
+
+    private LocalDate parseParameterDate(String param, boolean start){
+        LocalDate localDate;
+        try{
+            localDate = LocalDate.parse(param);
+        }
+        catch (Exception e){
+            localDate = start ? LocalDate.MIN : LocalDate.MAX;
+        }
+        return localDate;
+    }
+
+    private LocalTime parseParameterTime(String param, boolean start){
+        LocalTime localTime;
+        try{
+            localTime = LocalTime.parse(param);
+        }
+        catch (Exception e){
+            localTime = start ? LocalTime.MIN : LocalTime.MAX;
+        }
+        return localTime;
+    }
+
 }

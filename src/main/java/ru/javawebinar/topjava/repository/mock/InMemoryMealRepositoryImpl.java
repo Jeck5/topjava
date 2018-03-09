@@ -25,9 +25,9 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     {
         MealsUtil.MEALS.forEach(meal -> {
-            meal.setUserId(1);
+            meal.setUserId((meal.getDateTime().getYear() % 5) + 1);
             save(meal, 1);
-        });  //TODO check
+        });
     }
 
     @Override
