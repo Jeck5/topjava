@@ -9,13 +9,11 @@ import java.time.LocalTime;
 import java.util.List;
 
 public interface MealService {
-    Meal create(Meal meal, Integer userId);
+    Meal createOrUpdate(Meal meal, Integer userId) throws NotFoundException;
 
     void delete(int id, Integer userId) throws NotFoundException;
 
     Meal get(int id, Integer userId) throws NotFoundException;
-
-    void update(Meal meal, Integer userId);
 
     List<MealWithExceed> getAll(Integer userId,int caloriesPerDay);
 

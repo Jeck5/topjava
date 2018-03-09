@@ -5,8 +5,11 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -23,13 +26,12 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     {
         MealsUtil.MEALS.forEach(meal -> {
             meal.setUserId(1);
-            save(meal, 1);});  //TODO check
+            save(meal, 1);
+        });  //TODO check
     }
 
     @Override
     public Meal save(Meal meal, Integer userId) {
-        if (meal == null) { return null; }
-        else if (!meal.getUserId().equals(userId)) {return null; }
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             repository.put(meal.getId(), meal);
@@ -42,8 +44,11 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public boolean delete(int id, Integer userId) {
         Meal meal = repository.get(id);
-        if (meal == null) { return false; }
-        else if (!meal.getUserId().equals(userId)) {return false; }
+        if (meal == null) {
+            return false;
+        } else if (!meal.getUserId().equals(userId)) {
+            return false;
+        }
         repository.remove(id);
         return true;
     }
@@ -51,14 +56,24 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public Meal get(int id, Integer userId) {
         Meal meal = repository.get(id);
-        if (meal == null) { return null; }
-        else if (!meal.getUserId().equals(userId)) {return null; }
+        if (meal == null) {
+            return null;
+        } else if (!meal.getUserId().equals(userId)) {
+            return null;
+        }
         return meal;
     }
 
     @Override
     public List<Meal> getAll(Integer userId) {
         return repository.values().stream().filter(meal -> meal.getUserId().equals(userId)).sorted(Comparator.comparing(Meal::getDateTime)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Meal> getFilteredByDate(LocalDate startDate, LocalDate endDate, Integer userId) {
+        return repository.values().stream().filter(meal ->
+                meal.getUserId().equals(userId) && DateTimeUtil.isBetween(meal.getDate(), startDate, endDate))
+                .sorted(Comparator.comparing(Meal::getDateTime)).collect(Collectors.toList()); //TODO check duplication
     }
 }
 
