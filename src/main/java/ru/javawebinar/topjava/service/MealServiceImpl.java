@@ -30,34 +30,32 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Meal createOrUpdate(Meal meal, Integer userId, boolean update)  throws NotFoundException {
-        if (meal == null) {
-            throw new NotFoundException("meal is null");
-        } else if (!meal.getUserId().equals(userId)) {
+    public Meal createOrUpdate(Meal meal, Integer userId, boolean update) throws NotFoundException {
+        checkNotFound(meal, "meal is null");
+        if (!userId.equals(meal.getUserId())) {
             throw new NotFoundException(String.format("Meal %d wasn't found for user %d", meal.getId(), userId));
         }
-        if (update) { return checkNotFoundWithId(repository.save(meal, userId),meal.getId());}
-        else {return repository.save(meal, userId);}
+        if (update) {
+            return checkNotFoundWithId(repository.save(meal), meal.getId());
+        } else {
+            return repository.save(meal);
+        }
     }
 
     @Override
     public void delete(int id, Integer userId) throws NotFoundException {
-        if (!repository.delete(id, userId))
-            throw new NotFoundException(String.format("Meal %d wasn't found for user %d", id, userId));
+        get(id,userId);
+        repository.delete(id);
     }
 
     @Override
     public Meal get(int id, Integer userId) throws NotFoundException {
-        Meal meal = repository.get(id, userId);
-        if (meal == null) throw new NotFoundException(String.format("Meal %d wasn't found for user %d", id, userId));
+        Meal meal = checkNotFoundWithId(repository.get(id), id);
+        if (!userId.equals(meal.getUserId())) {
+            throw new NotFoundException(String.format("Meal %d wasn't found for user %d", id, userId));
+        }
         return meal;
     }
-
-//    @Override
-//    public void update(Meal meal, Integer userId) throws NotFoundException {
-//        //if meal.getId()
-//        repository.save(meal, userId);
-//    }
 
     @Override
     public List<MealWithExceed> getAll(Integer userId, int caloriesPerDay) {

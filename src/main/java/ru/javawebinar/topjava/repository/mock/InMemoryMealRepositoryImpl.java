@@ -10,10 +10,7 @@ import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -26,12 +23,12 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     {
         MealsUtil.MEALS.forEach(meal -> {
             meal.setUserId((meal.getDateTime().getYear() % 5) + 1);
-            save(meal, 1);
+            save(meal);
         });
     }
 
     @Override
-    public Meal save(Meal meal, Integer userId) {
+    public Meal save(Meal meal) {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             repository.put(meal.getId(), meal);
@@ -42,31 +39,23 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public boolean delete(int id, Integer userId) {
-        Meal meal = repository.get(id);
-        if (meal == null) {
-            return false;
-        } else if (!meal.getUserId().equals(userId)) {
-            return false;
-        }
-        repository.remove(id);
-        return true;
+    public boolean delete(int id) {
+        return (repository.remove(id) != null);
     }
 
     @Override
-    public Meal get(int id, Integer userId) {
-        Meal meal = repository.get(id);
-        if (meal == null) {
-            return null;
-        } else if (!meal.getUserId().equals(userId)) {
-            return null;
-        }
-        return meal;
+    public Meal get(int id) {
+        return repository.get(id);
     }
 
     @Override
     public List<Meal> getAll(Integer userId) {
         return repository.values().stream().filter(meal -> meal.getUserId().equals(userId)).sorted(Comparator.comparing(Meal::getDateTime)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Meal> getAll() {
+        return new ArrayList<>(repository.values());
     }
 
     @Override

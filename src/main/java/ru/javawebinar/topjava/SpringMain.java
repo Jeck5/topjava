@@ -28,10 +28,7 @@ public class SpringMain {
             mealRestController.delete(3);
             mealRestController.getAll().forEach(System.out::println);
 
-            Meal meal = new Meal(null, LocalDateTime.now(),"abcd",1234);
-
-            mealRestController.update(meal,17 );
-            mealRestController.getAll().forEach(System.out::println);
+            System.out.println(AuthorizedUser.id());
 
         }
     }
