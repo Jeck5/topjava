@@ -56,8 +56,9 @@ public class MealServlet extends HttpServlet {
                 Integer.parseInt(request.getParameter("calories")));
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        meal.setUserId(AuthorizedUser.id()); //TODO check
-        controller.create(meal); //Todo or update
+        meal.setUserId(AuthorizedUser.id());
+        if (meal.isNew()) { controller.create(meal); }
+        else { controller.update(meal,meal.getId()); }
         response.sendRedirect("meals");
     }
 

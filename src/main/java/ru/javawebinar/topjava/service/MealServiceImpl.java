@@ -15,6 +15,9 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
+
 @Service
 public class MealServiceImpl implements MealService {
 
@@ -27,13 +30,14 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Meal createOrUpdate(Meal meal, Integer userId)  throws NotFoundException {
+    public Meal createOrUpdate(Meal meal, Integer userId, boolean update)  throws NotFoundException {
         if (meal == null) {
             throw new NotFoundException("meal is null");
         } else if (!meal.getUserId().equals(userId)) {
             throw new NotFoundException(String.format("Meal %d wasn't found for user %d", meal.getId(), userId));
         }
-        return repository.save(meal, userId);
+        if (update) { return checkNotFoundWithId(repository.save(meal, userId),meal.getId());}
+        else {return repository.save(meal, userId);}
     }
 
     @Override
