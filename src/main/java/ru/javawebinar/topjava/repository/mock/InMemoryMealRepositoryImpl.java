@@ -62,7 +62,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     public List<Meal> getFilteredByDate(LocalDate startDate, LocalDate endDate, Integer userId) {
         return repository.values().stream().filter(meal ->
                 meal.getUserId().equals(userId) && DateTimeUtil.isBetween(meal.getDate(), startDate, endDate))
-                .sorted(Comparator.comparing(Meal::getDateTime)).collect(Collectors.toList()); //TODO check duplication
+                .sorted(Comparator.comparing(Meal::getDateTime)).collect(Collectors.toList());
     }
 }
 

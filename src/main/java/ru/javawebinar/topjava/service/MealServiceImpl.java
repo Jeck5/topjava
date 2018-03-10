@@ -67,7 +67,6 @@ public class MealServiceImpl implements MealService {
                                             LocalDate endDate, LocalTime endTime, Integer userId, int caloriesPerDay) {
         return MealsUtil.getWithExceeded(repository.getFilteredByDate(startDate, endDate, userId), caloriesPerDay)
                 .stream().filter(meal -> DateTimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime)).collect(Collectors.toList());
-// TODO try with generics
 
     }
 }
