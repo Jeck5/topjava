@@ -2,14 +2,10 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
-import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletConfig;
@@ -41,7 +37,7 @@ public class MealServlet extends HttpServlet {
     }
 
     @Override
-    public void destroy(){
+    public void destroy() {
         appCtx.close();
     }
 
@@ -49,17 +45,19 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
-        String UserId = request.getParameter("userId");
 
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")),
-                UserId.isEmpty() ? null : Integer.valueOf(UserId));
+                AuthorizedUser.id());
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        if (meal.isNew()) { controller.create(meal); }
-        else { controller.update(meal,meal.getId()); }
+        if (meal.isNew()) {
+            controller.create(meal);
+        } else {
+            controller.update(meal, meal.getId());
+        }
         response.sendRedirect("meals");
     }
 
@@ -88,14 +86,14 @@ public class MealServlet extends HttpServlet {
                     log.info("getAll");
                     request.setAttribute("meals",
                             controller.getAll());
-                } else{
+                } else {
                     log.info("getFiltered");
-                    LocalDate startDate = parseParameterDate(request.getParameter("startDate"),true);
-                    LocalDate endDate = parseParameterDate(request.getParameter("endDate"),false);
-                    LocalTime startTime = parseParameterTime(request.getParameter("startTime"),true);
-                    LocalTime endTime = parseParameterTime(request.getParameter("endTime"),false);
+                    LocalDate startDate = parseParameterDate(request.getParameter("startDate"), true);
+                    LocalDate endDate = parseParameterDate(request.getParameter("endDate"), false);
+                    LocalTime startTime = parseParameterTime(request.getParameter("startTime"), true);
+                    LocalTime endTime = parseParameterTime(request.getParameter("endTime"), false);
                     request.setAttribute("meals",
-                            controller.getFiltered(startDate,startTime,endDate,endTime));
+                            controller.getFiltered(startDate, startTime, endDate, endTime));
                 }
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
@@ -107,23 +105,21 @@ public class MealServlet extends HttpServlet {
         return Integer.parseInt(paramId);
     }
 
-    private LocalDate parseParameterDate(String param, boolean start){
+    private LocalDate parseParameterDate(String param, boolean start) {
         LocalDate localDate;
-        try{
+        try {
             localDate = LocalDate.parse(param);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             localDate = start ? LocalDate.MIN : LocalDate.MAX;
         }
         return localDate;
     }
 
-    private LocalTime parseParameterTime(String param, boolean start){
+    private LocalTime parseParameterTime(String param, boolean start) {
         LocalTime localTime;
-        try{
+        try {
             localTime = LocalTime.parse(param);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             localTime = start ? LocalTime.MIN : LocalTime.MAX;
         }
         return localTime;

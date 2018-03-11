@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealWithExceed;
@@ -15,7 +14,6 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -30,31 +28,23 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Meal createOrUpdate(Meal meal, Integer userId, boolean update) throws NotFoundException {
-        checkNotFound(meal, "meal is null");
-        if (!userId.equals(meal.getUserId())) {
-            throw new NotFoundException(String.format("Meal %d wasn't found for user %d", meal.getId(), userId));
-        }
-        if (update) {
-            return checkNotFoundWithId(repository.save(meal), meal.getId());
-        } else {
-            return repository.save(meal);
-        }
+    public Meal create(Meal meal, Integer userId) throws NotFoundException {
+        return repository.save(meal);
+    }
+
+    @Override
+    public Meal update(Meal meal, Integer userId) throws NotFoundException {
+        return checkNotFoundWithId(repository.save(meal), meal.getId());
     }
 
     @Override
     public void delete(int id, Integer userId) throws NotFoundException {
-        get(id,userId);
-        repository.delete(id);
+        checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
     @Override
     public Meal get(int id, Integer userId) throws NotFoundException {
-        Meal meal = checkNotFoundWithId(repository.get(id), id);
-        if (!userId.equals(meal.getUserId())) {
-            throw new NotFoundException(String.format("Meal %d wasn't found for user %d", id, userId));
-        }
-        return meal;
+        return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
     @Override
