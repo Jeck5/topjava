@@ -21,8 +21,9 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
+        List<Integer> userIdList = new LinkedList<Integer>(Arrays.asList(1,1,1,1,1,1,2,2,2,2,2,2,3,3,0,0));
         MealsUtil.MEALS.forEach(meal -> {
-            meal.setUserId((meal.getDateTime().getYear() % 5) + 1);
+            meal.setUserId(userIdList.remove(0));
             save(meal);
         });
     }
@@ -50,12 +51,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(Integer userId) {
-        return repository.values().stream().filter(meal -> meal.getUserId().equals(userId)).sorted(Comparator.comparing(Meal::getDateTime)).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Meal> getAll() {
-        return new ArrayList<>(repository.values());
+        return repository.values().stream().filter(meal -> meal.getUserId().equals(userId)).sorted(Comparator.comparing(Meal::getDateTime).reversed()).collect(Collectors.toList());
     }
 
     @Override
