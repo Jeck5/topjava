@@ -18,9 +18,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        List<Integer> userIdList = new LinkedList<Integer>(Arrays.asList(1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 0, 0));
         MealsUtil.MEALS.forEach(meal -> {
-            save(meal, userIdList.remove(0));
+            save(meal, meal.getUserId());
         });
     }
 
