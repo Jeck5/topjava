@@ -55,8 +55,6 @@ public class MealServiceImpl implements MealService {
     @Override
     public List<MealWithExceed> getFiltered(LocalDate startDate, LocalTime startTime,
                                             LocalDate endDate, LocalTime endTime, Integer userId, int caloriesPerDay) {
-        return MealsUtil.getWithExceeded(repository.getFilteredByDate(startDate, endDate, userId), caloriesPerDay)
-                .stream().filter(meal -> DateTimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime)).collect(Collectors.toList());
-
+        return MealsUtil.getFilteredWithExceeded(repository.getFilteredByDate(startDate, endDate, userId), caloriesPerDay, startTime ,endTime);
     }
 }
