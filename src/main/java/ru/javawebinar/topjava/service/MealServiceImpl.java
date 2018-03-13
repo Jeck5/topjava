@@ -29,12 +29,12 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public Meal create(Meal meal, Integer userId) throws NotFoundException {
-        return repository.save(meal);
+        return repository.save(meal, userId);
     }
 
     @Override
     public Meal update(Meal meal, Integer userId) throws NotFoundException {
-        return checkNotFoundWithId(repository.save(meal), meal.getId());
+        return checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 
     @Override
