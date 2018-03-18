@@ -41,12 +41,12 @@ public class MealServiceImplTest {
     @Test
     public void get() {
         Meal meal = service.get(MEAL_START_ID + 1, USER_ID);
-        assertThat(meal).isEqualTo(MEAL2);
+        assertThat(meal).isEqualToComparingFieldByField(MEAL2);
     }
 
     @Test(expected = NotFoundException.class)
     public void getNotFound() {
-        Meal meal = service.get(MEAL_START_ID + 2, ADMIN_ID);
+        service.get(MEAL_START_ID + 2, ADMIN_ID);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class MealServiceImplTest {
     public void update() {
         Meal meal = new Meal(MEAL3.getId(), LocalDateTime.now(), "for test", 1111);
         service.update(meal, USER_ID);
-        assertThat(meal).isEqualTo(service.get(MEAL3.getId(), USER_ID));
+        assertThat(meal).isEqualToComparingFieldByField(service.get(MEAL3.getId(), USER_ID));
     }
 
     @Test(expected = NotFoundException.class)

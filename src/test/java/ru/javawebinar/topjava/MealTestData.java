@@ -2,7 +2,9 @@ package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,8 +25,7 @@ public class MealTestData {
     public static final LocalDateTime LOCAL_DATE_TIME_TO =  LocalDateTime.parse("2018-03-17T11:00:00");
 
     public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
-        assertThat(actual).isEqualTo(Stream.of(expected).sorted(Comparator.comparing(Meal::getDateTime).reversed())
+        assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(Stream.of(expected).sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList()));
     }
-
 }
