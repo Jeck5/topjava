@@ -28,4 +28,8 @@ public class MealTestData {
         assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(Stream.of(expected).sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList()));
     }
+
+    public static void assertMatch(Meal actual, Meal expected) {
+        assertThat(actual).isEqualToComparingFieldByField(expected);
+    }
 }
