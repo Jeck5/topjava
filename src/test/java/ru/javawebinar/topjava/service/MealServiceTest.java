@@ -35,7 +35,8 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
     private static final Logger logger = LoggerFactory.getLogger(MealServiceTest.class);
 
-    private static Map<Description, Long> testTimeMap;
+    private static Map<Description, Long> testTimeMap = new HashMap<>();
+    ;
 
     @Autowired
     private MealService service;
@@ -64,15 +65,11 @@ public class MealServiceTest {
         SLF4JBridgeHandler.install();
     }
 
-    @BeforeClass
-    public static void before() {
-        testTimeMap = new HashMap<>();
-    }
-
     @AfterClass
     public static void after() {
-        logger.info("Tests stats:");
-        testTimeMap.forEach(MealServiceTest::logInfo);
+        logger.info(testTimeMap.entrySet().stream().map(pair ->
+                String.format("Test %s - %d microseconds\n", pair.getKey().getMethodName(),
+                        TimeUnit.NANOSECONDS.toMicros(pair.getValue()))).reduce(String::concat).get());
     }
 
 
