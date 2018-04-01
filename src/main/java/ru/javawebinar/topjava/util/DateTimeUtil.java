@@ -28,4 +28,12 @@ public class DateTimeUtil {
     public static LocalTime parseLocalTime(String str) {
         return StringUtils.isEmpty(str) ? null : LocalTime.parse(str);
     }
+//
+//    public static <T> T convertToT(LocalDateTime ldt,Class<T> clazz) throws Exception{
+//        T t = clazz.newInstance();
+//        if (t instanceof LocalDateTime) return ldt;
+//        else
+
+
+
 }
