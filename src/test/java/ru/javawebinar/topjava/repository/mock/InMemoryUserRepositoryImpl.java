@@ -48,6 +48,11 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getWithMeals(int id) {
+        throw new UnsupportedOperationException("method is not implemented");
+    }
+
+    @Override
     public List<User> getAll() {
         return repository.values().stream()
                 .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))

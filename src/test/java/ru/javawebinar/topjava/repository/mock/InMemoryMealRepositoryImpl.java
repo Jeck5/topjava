@@ -60,6 +60,11 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
+    public Meal getWithUser(int id, int userId) {
+        throw new UnsupportedOperationException("method is not implemented");
+    }
+
+    @Override
     public List<Meal> getAll(int userId) {
         return getAllFiltered(userId, meal -> true);
     }

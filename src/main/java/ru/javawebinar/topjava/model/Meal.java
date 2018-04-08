@@ -21,6 +21,8 @@ import java.time.LocalTime;
 })
 @Entity
 @Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "meals_unique_user_datetime_idx")})
+@NamedEntityGraph(name = "Meal.user",
+        attributeNodes = @NamedAttributeNode("user"))
 public class Meal extends AbstractBaseEntity {
     public static final String ALL_SORTED = "Meal.getAll";
     public static final String DELETE = "Meal.delete";
@@ -39,7 +41,7 @@ public class Meal extends AbstractBaseEntity {
     @Range(min = 10, max = 5000)
     private int calories;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @NotNull
     private User user;

@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +26,9 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
 
     @Override
     Optional<User> findById(Integer id);
+
+    @EntityGraph(value = "User.meals", type = EntityGraph.EntityGraphType.LOAD)
+    Optional<User> getWithMealsById(Integer id);
 
     @Override
     List<User> findAll(Sort sort);

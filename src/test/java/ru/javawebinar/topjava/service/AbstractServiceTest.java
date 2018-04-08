@@ -31,14 +31,14 @@ public abstract class AbstractServiceTest {
 
     private static final Logger log = getLogger("result");
 
-    private static StringBuilder results;
+    private static StringBuilder results = new StringBuilder("");
     static {
         // needed only for java.util.logging (postgres driver)
         SLF4JBridgeHandler.install();
     }
 
     @BeforeClass
-    public static void clearResults(){ results = new StringBuilder(""); }
+    public static void clearResults(){ results.setLength(0); }
 
     @AfterClass
     public static void printResult() {

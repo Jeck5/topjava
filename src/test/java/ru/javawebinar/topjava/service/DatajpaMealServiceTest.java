@@ -10,6 +10,6 @@ import static ru.javawebinar.topjava.MealTestData.*;
 public class DatajpaMealServiceTest extends MealServiceTest {
     @Test
     public void getWithUser() {
-        assertMatch(service.get(ADMIN_MEAL_ID, ADMIN_ID).getUser(), ADMIN);
+        assertMatch(service.getWithUser(ADMIN_MEAL_ID, ADMIN_ID).getUser(), ADMIN);
     }
 }

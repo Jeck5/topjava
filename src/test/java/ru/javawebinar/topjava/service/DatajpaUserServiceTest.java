@@ -14,7 +14,7 @@ import static ru.javawebinar.topjava.MealTestData.*;
 public class DatajpaUserServiceTest extends UserServiceTest {
     @Test
     public void getWithMeals() {
-        assertMatch(service.get(USER_ID).getMeals().stream().sorted(Comparator.comparing(Meal::getDateTime).reversed()).collect(Collectors.toList()),
+        assertMatch(service.getWithMeals(USER_ID).getMeals().stream().sorted(Comparator.comparing(Meal::getDateTime).reversed()).collect(Collectors.toList()),
                 MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
     }
 }
