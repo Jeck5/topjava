@@ -12,7 +12,7 @@ import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.Date;
 
-public class AbstractJpaUserServiceTest extends AbstractUserServiceTest{
+public abstract class AbstractJpaUserServiceTest extends AbstractUserServiceTest{
 
     @Autowired
     protected JpaUtil jpaUtil;
