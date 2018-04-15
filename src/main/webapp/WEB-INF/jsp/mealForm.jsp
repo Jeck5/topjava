@@ -9,10 +9,15 @@
 </head>
 <body>
 <section>
-    <h3><a href="index.html"><spring:message code="common.home"/></a></h3>
+    <h3><a href="/topjava"><spring:message code="common.home"/></a></h3>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
-    <%--<h2>${ (meal.id == null) ? <spring:message code="meal.create"/> : <spring:message code="meal.update"/>}</h2>--%>
-    <hr>
+    <c:if test = "${meal.id == null}">
+        <h2><spring:message code="meal.create"/></h2>
+    </c:if>
+    <c:if test = "${meal.id != null}">
+        <h2><spring:message code="meal.update"/></h2>
+    </c:if>
+     <hr>
     <form method="post" action="meal" accept-charset="utf-8">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
