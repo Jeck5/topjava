@@ -51,4 +51,12 @@ public class MealWithExceed {
                 ", exceed=" + exceed +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object that){
+        if(this == that) return true;
+        if(!(that instanceof MealWithExceed)) return false;
+        MealWithExceed meal = (MealWithExceed) that;
+        return toString().equals(meal.toString());
+    }
 }
