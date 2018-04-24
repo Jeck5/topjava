@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.CustomDateTimeFormat;
+import ru.javawebinar.topjava.util.DateTimeUtil;
+
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -60,6 +64,16 @@ public class MealRestController extends AbstractMealController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("endDate") LocalDate endDate,
             @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) @RequestParam("startTime") LocalTime startTime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) @RequestParam("endTime") LocalTime endTime
+    ) {
+        return super.getBetween(startDate, startTime, endDate, endTime);
+    }
+
+    @GetMapping(value = "/customfilter", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MealWithExceed> getBetweenCustom(
+            @CustomDateTimeFormat @RequestParam(value = "startDate", required = false) LocalDate startDate,
+            @CustomDateTimeFormat @RequestParam(value = "endDate", required = false) LocalDate endDate,
+            @CustomDateTimeFormat @RequestParam(value = "startTime", required = false) LocalTime startTime,
+            @CustomDateTimeFormat @RequestParam(value = "endTime", required = false) LocalTime endTime
     ) {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }

@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.web.meal;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.support.FormattingConversionServiceFactoryBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.MealTestData;
@@ -17,7 +19,6 @@ import java.time.Month;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_TIME;
-import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -28,6 +29,9 @@ import static ru.javawebinar.topjava.UserTestData.*;
 public class MealRestControllerTest extends AbstractControllerTest {
 
     private static final String REST_URL = MealRestController.REST_URL + '/';
+
+    @Autowired
+    FormattingConversionServiceFactoryBean bean;
 
     @Test
     public void testGet() throws Exception {
@@ -42,6 +46,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
     @Test
     public void testGetAll() throws Exception {
         TestUtil.print(mockMvc.perform(get(REST_URL))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MealTestData.contentJson(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1)));
@@ -81,13 +86,30 @@ public class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testGetBetween() throws Exception {//TODO ISO format
+    public void testGetBetween() throws Exception {
         LocalDate startDate = LocalDate.of(2015, Month.MAY, 31);
         LocalDate endDate = LocalDate.of(2015, Month.MAY, 31);
         LocalTime startTime = LocalTime.of(7, 0);
         LocalTime endTime = LocalTime.of(15, 0);
         mockMvc.perform(get(REST_URL + "filter?startDate=" + startDate.format(ISO_LOCAL_DATE) + "&endDate=" + endDate.format(ISO_LOCAL_DATE)
                 + "&startTime=" + startTime.format(ISO_LOCAL_TIME) + "&endTime=" + endTime.format(ISO_LOCAL_TIME)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MealTestData.contentJson(MEAL5, MEAL4));
+    }
+
+    @Test
+    public void testGetBetweenCustom() throws Exception {
+
+        bean.getObject();
+        LocalDate startDate = LocalDate.of(2015, Month.MAY, 31);
+        LocalDate endDate = LocalDate.of(2015, Month.MAY, 31);
+        LocalTime startTime = LocalTime.of(7, 0);
+        LocalTime endTime = LocalTime.of(15, 0);
+        mockMvc.perform(get(REST_URL + "customfilter?startDate=" + startDate.format(ISO_LOCAL_DATE)
+                + "&endTime=" + endTime.format(ISO_LOCAL_TIME)))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MealTestData.contentJson(MEAL5, MEAL4));
