@@ -59,6 +59,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
         ResultActions action = mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(expected)))
+                .andDo(print())
                 .andExpect(status().isCreated());
 
         Meal returned = TestUtil.readFromJson(action, Meal.class);
@@ -99,19 +100,4 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(MealTestData.contentJson(MEAL5, MEAL4));
     }
 
-    @Test
-    public void testGetBetweenCustom() throws Exception {
-
-        bean.getObject();
-        LocalDate startDate = LocalDate.of(2015, Month.MAY, 31);
-        LocalDate endDate = LocalDate.of(2015, Month.MAY, 31);
-        LocalTime startTime = LocalTime.of(7, 0);
-        LocalTime endTime = LocalTime.of(15, 0);
-        mockMvc.perform(get(REST_URL + "customfilter?startDate=" + startDate.format(ISO_LOCAL_DATE)
-                + "&endTime=" + endTime.format(ISO_LOCAL_TIME)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MealTestData.contentJson(MEAL5, MEAL4));
-    }
 }
