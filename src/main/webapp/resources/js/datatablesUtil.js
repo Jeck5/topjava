@@ -21,7 +21,8 @@ function deleteRow(id) {
         url: ajaxUrl + id,
         type: "DELETE",
         success: function () {
-            updateTable();
+            if ($("#filterForm").length) filter();
+            else updateTable();
             successNoty("Deleted");
         }
     });
@@ -41,10 +42,30 @@ function save() {
         data: form.serialize(),
         success: function () {
             $("#editRow").modal("hide");
-            updateTable();
+            if ($("#filterForm").length) filter();
+            else updateTable();
             successNoty("Saved");
         }
     });
+}
+
+function filter() {
+    var form = $("#filterForm");
+    var requestStr = ajaxUrl + "filter?" + form.serialize();
+    $.ajax({
+        type: "GET",
+        url: requestStr,
+        success: function (data) {
+            datatableApi.clear().rows.add(data).draw();
+            successNoty("Filtered");
+        }
+    });
+}
+
+function disableFilter() {
+    var form = $("#filterForm");
+    form.find('input').val("");
+    updateTable();
 }
 
 var failedNote;

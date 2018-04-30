@@ -13,7 +13,7 @@
 <div class="jumbotron">
     <div class="container">
         <h3><spring:message code="meal.title"/></h3>
-        <form method="post" action="meals/filter">
+        <form id="filterForm" method="get" action="meals/filter">
             <dl>
                 <dt><spring:message code="meal.startDate"/>:</dt>
                 <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
@@ -30,7 +30,17 @@
                 <dt><spring:message code="meal.endTime"/>:</dt>
                 <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
             </dl>
-            <button type="submit"><spring:message code="meal.filter"/></button>
+            <%--<button type="submit"><spring:message code="meal.filter"/></button>--%>
+            <button type="button" class="btn btn-primary" onclick="filter()">
+                <span class="fa fa-check" aria-hidden="true"></span>
+                <spring:message code="meal.filter"/>
+            </button>
+            <button type="button" class="btn btn-danger" onclick="disableFilter()">
+                <span class="fa fa-close" aria-hidden="true"></span>
+                <spring:message code="common.cancel"/>
+            </button>
+
+
         </form>
         <br/>
         <button class="btn btn-primary" onclick="add()">
