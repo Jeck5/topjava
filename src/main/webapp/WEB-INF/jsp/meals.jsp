@@ -85,7 +85,7 @@
                     </td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
-                    <td><a><span class="fa fa-pencil"></span></a></td>
+                    <td><a onclick="updateRow(${meal.id})"><span class="fa fa-pencil"></span></a></td>
                     <td><a onclick="deleteRow(${meal.id})"><span class="fa fa-remove"></span></a></td>
                 </tr>
             </c:forEach>
@@ -121,6 +121,7 @@
                         <label for="calories" class="col-form-label"><spring:message code="meal.calories"/></label>
                         <input type="number" class="form-control" id="calories" name="calories" placeholder="1000">
                     </div>
+                        <input type="checkbox" id="exceed" name="exceed" style="display:none" checked="checked" />
                 </form>
             </div>
             <div class="modal-footer">
@@ -138,4 +139,13 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
+<script type="text/javascript">
+    var i18n = [];
+    i18n["addTitle"] = '<spring:message code="user.add"/>';
+    i18n["editTitle"] = '<spring:message code="user.edit"/>';
+
+    <c:forEach var="key" items='<%=new String[]{"common.deleted","common.saved","common.enabled","common.disabled","common.errorStatus"}%>'>
+    i18n["${key}"] = "<spring:message code="${key}"/>";
+    </c:forEach>
+</script>
 </html>
