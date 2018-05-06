@@ -52,7 +52,7 @@ public class DateTimeFormatters {
 
         @Override
         public String print(LocalDateTime ldt, Locale locale) {
-            return ldt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            return ldt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).replaceFirst("T", " ");
         }
     }
 }

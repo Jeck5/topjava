@@ -12,7 +12,7 @@ function makeEditable() {
 
 function add() {
     $("#modalTitle").html(i18n["addTitle"]);
-    form.find(":input").val("");
+    form.find("input[data-preSet!='true']").val("");
     $("#editRow").modal();
 }
 

@@ -42,7 +42,6 @@ public class MealAjaxController extends AbstractMealController {
         if (result.hasErrors()) {
             return collectBindingErrors(result);
         }
-
         Meal meal = new Meal(mealTo.getId(), mealTo.getDateTime(), mealTo.getDescription(), mealTo.getCalories());
         if (meal.isNew()) {
             super.create(meal);
