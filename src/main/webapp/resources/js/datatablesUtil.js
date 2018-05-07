@@ -5,7 +5,9 @@ function makeEditable() {
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
     });
-
+    $('#dateTime').datetimepicker(
+        {format: 'Y-m-d h:m'}
+    );
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
     $.ajaxSetup({cache: false});
 }

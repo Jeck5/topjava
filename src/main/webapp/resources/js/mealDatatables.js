@@ -24,13 +24,7 @@ $(function () {
         "info": true,
         "columns": [
             {
-                "data": "dateTime",
-                "render": function (datetime, type, row) {
-                    if (type === "display") {
-                        return datetime.replace('T', ' ');
-                    }
-                    return datetime;
-                }
+                "data": "dateTime"
             },
             {
                 "data": "description"

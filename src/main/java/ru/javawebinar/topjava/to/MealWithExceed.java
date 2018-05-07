@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.to;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import java.util.Objects;
 public class MealWithExceed extends BaseTo {
 
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private final LocalDateTime dateTime;
 
     @NotBlank
