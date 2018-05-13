@@ -9,10 +9,15 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.ValidationUtil;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/ajax/profile/meals")
@@ -37,17 +42,12 @@ public class MealAjaxController extends AbstractMealController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createOrUpdate(@Valid Meal meal, BindingResult result) {
-        if (result.hasErrors()) {
-            // TODO change to exception handler
-            return ValidationUtil.getErrorResponse(result);
-        }
+    public void createOrUpdate(@Valid Meal meal, BindingResult result) {
         if (meal.isNew()) {
             super.create(meal);
         } else {
             super.update(meal, meal.getId());
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
