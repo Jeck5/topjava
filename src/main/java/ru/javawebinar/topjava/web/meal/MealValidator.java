@@ -31,9 +31,11 @@ public class MealValidator implements Validator {
     public void validate(Object target, Errors errors) {
         if (target instanceof Meal) {
             Meal meal = (Meal) target;
-            List<Meal> mealList = mealService.getBetweenDateTimes(meal.getDateTime(), meal.getDateTime(), AuthorizedUser.id());
-            if (mealList.stream().anyMatch(m -> !m.getId().equals(meal.getId()))) {
-                errors.rejectValue("dateTime", "meal.duplicated", messageSource.getMessage("meal.duplicated", null, LocaleContextHolder.getLocale()));
+            if (meal.getDateTime() != null) {
+                List<Meal> mealList = mealService.getBetweenDateTimes(meal.getDateTime(), meal.getDateTime(), AuthorizedUser.id());
+                if (mealList.stream().anyMatch(m -> !m.getId().equals(meal.getId()))) {
+                    errors.rejectValue("dateTime", "meal.duplicated", messageSource.getMessage("meal.duplicated", null, LocaleContextHolder.getLocale()));
+                }
             }
         }
     }
