@@ -22,12 +22,7 @@ public abstract class AbstractUserController {
 
 
     @Autowired
-    UserValidator userValidator;
-
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(userValidator);
-    }
+    protected UserValidator userValidator;
 
     public List<User> getAll() {
         log.info("getAll");

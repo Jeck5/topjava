@@ -15,6 +15,11 @@ import java.util.List;
 @RequestMapping("/ajax/admin/users")
 public class AdminAjaxController extends AbstractUserController {
 
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(userValidator);
+    }
+
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> getAll() {
