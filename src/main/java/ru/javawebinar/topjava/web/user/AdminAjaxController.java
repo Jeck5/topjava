@@ -17,7 +17,7 @@ public class AdminAjaxController extends AbstractUserController {
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(userValidator);
+        binder.addValidators(userValidator);
     }
 
     @Override

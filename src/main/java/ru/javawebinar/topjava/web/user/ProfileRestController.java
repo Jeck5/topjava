@@ -18,7 +18,7 @@ public class ProfileRestController extends AbstractUserController {
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(userValidator);
+        binder.addValidators(userValidator);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
