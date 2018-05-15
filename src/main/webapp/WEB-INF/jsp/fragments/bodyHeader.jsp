@@ -18,4 +18,5 @@
             </sec:authorize>
         </form:form>
     </div>
+    <jsp:include page="appLang.jsp"/>
 </nav>

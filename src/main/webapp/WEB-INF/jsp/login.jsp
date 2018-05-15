@@ -17,6 +17,7 @@
             </button>
         </form:form>
     </div>
+    <jsp:include page="fragments/appLang.jsp"/>
 </nav>
 
 <div class="jumbotron pt-0">
