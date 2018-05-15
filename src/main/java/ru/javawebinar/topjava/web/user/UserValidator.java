@@ -13,6 +13,8 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Locale;
 
+import static ru.javawebinar.topjava.util.UserUtil.asTo;
+
 @Component
 public class UserValidator implements Validator {
 
@@ -24,13 +26,19 @@ public class UserValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.equals(UserTo.class);
+        return User.class.equals(clazz) || UserTo.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
+        UserTo userTo = null;
         if (target instanceof UserTo) {
-            UserTo userTo = (UserTo) target;
+            userTo = (UserTo) target;
+        }
+        if (target instanceof User) {
+            userTo = asTo((User) target);
+        }
+        if (userTo != null) {
             try {
                 User user = userService.getByEmail(userTo.getEmail());
                 if (user != null && !user.getId().equals(userTo.getId()))

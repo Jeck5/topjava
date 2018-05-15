@@ -83,6 +83,17 @@ public class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void testUpdateWithDuplicatedDateTime() throws Exception {
+        Meal updated = getUpdated();
+        updated.setDateTime(MEAL2.getDateTime());
+        mockMvc.perform(put(REST_URL + MEAL1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated))
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     public void testUpdateNotVaild() throws Exception {
         Meal updated = getUpdated();
         updated.setCalories(Integer.MAX_VALUE);
